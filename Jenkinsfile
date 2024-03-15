@@ -6,18 +6,24 @@ pipeline {
     }
 
     stages {
-        
-       
-        stage('Docker Build') {
-            steps {
-                sh "docker build . -t sabair0509/hiring-app:$BUILD_NUMBER"
+        stage('Clone Repository'){
+            steps{
+                git branch: 'main',credentialsId:'git-account',url: 'https://github.com/Sravani-738/hiring-app.git'}
+        }
+        stage('Build Docker Image'){
+            steps{
+                script{
+                    sh "docker build . -t sravani738/hiring-app:$BUILD_NUMBER"
+                }
             }
         }
+                    
+            
         stage('Docker Push') {
             steps {
                 withCredentials([string(credentialsId: 'docker-hub', variable: 'hubPwd')]) {
-                    sh "docker login -u sabair0509 -p ${hubPwd}"
-                    sh "docker push sabair0509/hiring-app:$BUILD_NUMBER"
+                    sh "docker login -u  -p ${Sravs@738}"
+                    sh "docker push sravani738/hiring-app:$BUILD_NUMBER"
                 }
             }
         }
