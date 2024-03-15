@@ -1,7 +1,7 @@
 pipeline {
     agent any
-        environment {
-        IMAGE_TAG = "${BUILD_NUMBER}"
+    environment {
+        IMAGE_TAG = "$BUILD_NUMBER"
     }
     stages {
         stage('Docker Build') {
@@ -19,13 +19,13 @@ pipeline {
         }
         stage('Checkout K8S manifest SCM'){
             steps {
-              git branch: 'main', url: 'https://github.com/betawins/Hiring-app-argocd.git'
+                git branch: 'main', url: 'https://github.com/betawins/Hiring-app-argocd.git'
             }
         }
         stage('Update K8S manifest & push to Repo'){
             steps {
                 script{
-                   withCredentials([usernamePassword(credentialsId: 'Sravani738', passwordVariable: 'Sravs@738', usernameVariable: 'GIT_USERNAME')]) {
+                    withCredentials([usernamePassword(credentialsId: 'Sravani738', passwordVariable: 'Sravs@738', usernameVariable: 'GIT_USERNAME')]) {
                         sh '''
                         cat /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
                         sed -i "s/5/${BUILD_NUMBER}/g" /var/lib/jenkins/workspace/$JOB_NAME/dev/deployment.yaml
@@ -35,9 +35,9 @@ pipeline {
                         git remote -v
                         git push https://$GIT_USERNAME:$GIT_PASSWORD@github.com/betawins/Hiring-app-argocd.git main
                         '''
-                      }
-                  }
+                    }
+                }
             }
         }
-            }
+    }
 }
